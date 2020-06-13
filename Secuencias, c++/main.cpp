@@ -3,35 +3,25 @@
 using namespace std;
 int p;
 
-void Min_voraz(){}
+void Min_voraz(const vector<int>& A,const vector<int>& B){}
 
-vector<pair<int,int>> getBlocks(const vector<bool>& vec){
-    vector<pair<int,int>> blocks;
-    pair<int, int> block;
-    bool ones=false;
+vector<int> getBlocks(const vector<bool>& vec){
+    vector<int> blocks;
     for(int i = 0; i<p; i++){
-        if (!ones){
-            if(vec[i]) {
-                ones = true;
-                block.first = i;
+        int newBlock = 0;
+        if(vec[i]){
+            while(vec[i]){
+                newBlock++;
+                i++;
             }
-        }
-        else{
-            if(!vec[i]){
-                ones = false;
-                block.second = i-1;
-                blocks.push_back(block);
-            }
-            else if(vec[i] and i==p-1){
-                block.second = i;
-                blocks.push_back(block);
-            }
+            blocks.push_back(newBlock);
         }
     }
     return blocks;
 }
 
-void print_vector(const vector<bool>& vec){
+template <class T>
+void print_vector(const vector<T>& vec){
     for(auto c: vec)
         cout<<c;
     cout<<'\n';
@@ -39,7 +29,7 @@ void print_vector(const vector<bool>& vec){
 
 int main() {
     vector<bool> A, B;
-    vector<pair<int,int>> A_blocks, B_blocks;
+    vector<int> A_blocks, B_blocks;
     string a, b;
 
     cout << "Enter size for vector A and B:\n";
@@ -63,7 +53,10 @@ int main() {
     A_blocks = getBlocks(A);
     B_blocks = getBlocks(B);
 
-    Min_voraz();
+    print_vector(A_blocks);
+    print_vector(B_blocks);
+
+    Min_voraz(A_blocks, B_blocks);
 
     return 0;
 }
