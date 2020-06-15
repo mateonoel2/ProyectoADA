@@ -18,17 +18,16 @@ void conectar(int A, int B){
     delete paircito;
 }
 
-void ResetConection(int &ACurrent, int &BCurrent, int &BCWeight, int&ACWeigth, int A[], int B[], bool &divided, bool &combined, float &weight){
+void ResetConection(int &ACurrent, int &BCurrent, int &BCWeight, int&ACWeigth, vector<int> A, vector<int> B, bool &divided, bool &combined, float &weight){
     ACurrent++;
     BCurrent++;
     conectar(A[ACurrent], B[BCurrent]);
     ACWeigth = A[ACurrent];
     BCWeight = B[BCurrent];
-    divided = 0; combined = 0;
+    divided = false; combined = false;
 }
 
 float Min_voraz(const vector<int>& A,const vector<int>& B){
-
     int sizeA = A.size(), sizeB = B.size();
     float weight = 0;
     bool divided = false, combined = false;
@@ -43,15 +42,18 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                     if(divided) {
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
-                    }else if (ACWeigth + A[i] < BCWeight){
-                        combined = 1; divided = 0;
+                    }
+                    else if (ACWeigth + A[i] < BCWeight){
+                        combined = true; divided = false;
                         ACurrent++;
                         conectar(A[ACurrent], B[BCurrent]);
                         ACWeigth+=A[ACurrent];
-                    }else{
+                    }
+                    else{
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
-                    }}
+                    }
+                }
                 else{
                     weight += float(ACWeigth) / float(BCWeight);
                     ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
@@ -67,11 +69,12 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                         BCurrent++;
                         i--;
                         conectar(A[ACurrent], B[BCurrent]);
-                        divided =1, combined=0;
+                        divided =true, combined=false;
                     }else{
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
-                    }}
+                    }
+                }
                 else{
                     weight += float(ACWeigth) / float(BCWeight);
                     ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
@@ -85,14 +88,14 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
         else{
             BCurrent++;
             conectar(A[ACurrent], B[BCurrent]);
-            if(BCurrent == sizeB-1)break;
+            if(BCurrent == sizeB-1) break;
         }
     }
     weight += float(ACWeigth) / float(BCWeight);
     return weight;
 }
 
-int Min_recursivo(vector<int> A, vector<int> B, int a, int b){
+float Min_recursivo(vector<int> A, vector<int> B, int a, int b){
     A.erase(A.begin(), A.begin() + a);
     B.erase(B.begin(), B.begin() + b);
     int m = A.size();
@@ -101,33 +104,34 @@ int Min_recursivo(vector<int> A, vector<int> B, int a, int b){
         int sumB=0;
         for(int i=0; i<n; i++)
             sumB = sumB+B[i];
-        return A[0]/sumB;
+        return float(A[0])/float(sumB);
     }
     if (n==1){
         int sumA=0;
         for(int i=0; i<m; i++)
             sumA = sumA+A[i];
-        return sumA/B[0];
+        return float(sumA)/float(B[0]);
     }
-    vector<int> posibles;
-    for(int i=0; i<m-1; i++){
+    vector<float> posibles;
+    for(int i=0; i<m-2; i++){
         int sumA=0;
         for(int j=0; j<=i; j++)
             sumA = sumA+A[j];
-        posibles.push_back(sumA/B[0] + Min_recursivo(A,B,i,1));
+        posibles.push_back(float(sumA)/float(B[0]) + Min_recursivo(A,B,i,1));
     }
-    for(int i=0; i<n-1; i++){
+    for(int i=0; i<n-2; i++){
         int sumB=0;
         for(int j=0; j<=i; j++)
             sumB = sumB+B[j];
-        posibles.push_back(A[0]/sumB + Min_recursivo(A,B,1,i));
+        posibles.push_back(float(A[0])/float(sumB) + Min_recursivo(A,B,1,i));
     }
     return *min_element(posibles.begin(), posibles.end());
 }
 
-int Min_memoizado(vector<int> A, vector<int> B, int a, int b, int **M){
-    if(M[a][b])
+float Min_memoizado(vector<int> A, vector<int> B, int a, int b, float **M){
+    if(bool(M[a][b]))
         return M[a][b];
+
     A.erase(A.begin(), A.begin() + a);
     B.erase(B.begin(), B.begin() + b);
     int m = A.size();
@@ -136,27 +140,31 @@ int Min_memoizado(vector<int> A, vector<int> B, int a, int b, int **M){
         int sumB=0;
         for(int i=0; i<n; i++)
             sumB = sumB+B[i];
-        return A[0]/sumB;
+        return float(A[0])/float(sumB);
     }
     if (n==1){
         int sumA=0;
         for(int i=0; i<m; i++)
             sumA = sumA+A[i];
-        return sumA/B[0];
+        return float(sumA)/float(B[0]);
     }
-    vector<int> posibles;
-    for(int i=0; i<m-1; i++){
+    vector<float> posibles;
+    for(int i=0; i<m-2; i++){
         int sumA=0;
         for(int j=0; j<=i; j++)
             sumA = sumA+A[j];
-        posibles.push_back(sumA/B[0] + Min_memoizado(A,B,i,1, M));
+        posibles.push_back(float(sumA)/float(B[0]) + Min_recursivo(A,B,i,1));
     }
-    for(int i=0; i<n-1; i++){
+    for(int i=0; i<n-2; i++){
         int sumB=0;
         for(int j=0; j<=i; j++)
             sumB = sumB+B[j];
-        posibles.push_back(A[0]/sumB + Min_memoizado(A,B,1,i, M));
+        posibles.push_back(float(A[0])/float(sumB) + Min_recursivo(A,B,1,i));
     }
+
+
+
+
     M[a][b] = *min_element(posibles.begin(), posibles.end());
     return M[a][b];
 }
@@ -175,8 +183,6 @@ vector<int> getBlocks(const vector<bool>& vec){
     }
     return blocks;
 }
-
-
 
 int main() {
     vector<bool> A, B;
@@ -199,8 +205,6 @@ int main() {
         else if(b[i] == '1') B.push_back(true);
     }
 
-    //print_vector(A);
-    //print_vector(B);
     A_blocks = getBlocks(A);
     B_blocks = getBlocks(B);
 
@@ -210,23 +214,23 @@ int main() {
     print_vector(B_blocks);
 
 
-    cout<<"\n Min_Matching_Voraz: "<<Min_voraz(A_blocks, B_blocks);
+    cout<<"Min_Matching_Voraz: "<<Min_voraz(A_blocks, B_blocks);
 
-    cout<<"\n Min_Matching_Recursivo: "<<Min_recursivo(A_blocks, B_blocks, 0, 0);
+    cout<<"\nMin_Matching_Recursivo: "<<Min_recursivo(A_blocks, B_blocks, 0, 0);
 
     int m = A_blocks.size();
     int n = B_blocks.size();
-    int **M;
-    M = new int *[m];
+    float **M;
+    M = new float *[m];
     for(int i = 0; i < m; i++)
-        M[i] = new int[n];
+        M[i] = new float[n];
 
     for(int i=0; i<m; i++){
         for(int j=0; j<n; j++){
             M[i][j] = 0;
         }
     }
-    cout<<"\n Min_Matching_Memoizado: "<<Min_memoizado(A_blocks,B_blocks, 0, 0, M);
+    cout<<"\nMin_Matching_Memoizado: "<<Min_memoizado(A_blocks,B_blocks, 0, 0, M);
 
     return 0;
 }
