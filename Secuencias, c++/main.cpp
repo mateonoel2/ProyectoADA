@@ -3,7 +3,47 @@
 using namespace std;
 int p;
 
+template <class T>
+void print_vector(const vector<T>& vec){
+    for(auto c: vec)
+        cout<<c;
+    cout<<'\n';
+}
+
 void Min_voraz(const vector<int>& A,const vector<int>& B){}
+
+int Min_recursivo(vector<int> A, vector<int> B, int a, int b){
+    A.erase(A.begin(), A.begin() + a);
+    B.erase(B.begin(), B.begin() + b);
+    int m = A.size();
+    int n = B.size();
+    if (m==1){
+        int sumB=0;
+        for(int i=0; i<n; i++)
+            sumB = sumB+B[i];
+        return A[0]/sumB;
+    }
+    if (n==1){
+        int sumA=0;
+        for(int i=0; i<m; i++)
+            sumA = sumA+A[i];
+        return sumA/B[0];
+    }
+    vector<int> posibles;
+    for(int i=0; i<m-1; i++){
+        int sumA=0;
+        for(int j=0; j<=i; j++)
+            sumA = sumA+A[j];
+        posibles.push_back(sumA/B[0] + Min_recursivo(A,B,i,1));
+    }
+    for(int i=0; i<n-1; i++){
+        int sumB=0;
+        for(int j=0; j<=i; j++)
+            sumB = sumB+B[j];
+        posibles.push_back(A[0]/sumB + Min_recursivo(A,B,1,i));
+    }
+    return *min_element(posibles.begin(), posibles.end());
+}
 
 vector<int> getBlocks(const vector<bool>& vec){
     vector<int> blocks;
@@ -20,12 +60,7 @@ vector<int> getBlocks(const vector<bool>& vec){
     return blocks;
 }
 
-template <class T>
-void print_vector(const vector<T>& vec){
-    for(auto c: vec)
-        cout<<c;
-    cout<<'\n';
-}
+
 
 int main() {
     vector<bool> A, B;
@@ -56,7 +91,7 @@ int main() {
     print_vector(A_blocks);
     print_vector(B_blocks);
 
-    Min_voraz(A_blocks, B_blocks);
+    Min_recursivo(A_blocks, B_blocks, 0, 0);
 
     return 0;
 }
