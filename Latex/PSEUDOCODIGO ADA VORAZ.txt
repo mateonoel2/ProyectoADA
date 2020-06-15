@@ -40,7 +40,7 @@ for(i = 2; i < BloquesDeA; i++):
 			BCurrentw = w(BCurrent)
 	ekse:
 		if ACurrent < sizeA-1:
-			if divided:
+			if combined:
 				BCurrent++
 				ACurrent++
 				peso += ACurrentw/BCurrentw
