@@ -40,25 +40,18 @@ for(i = 2; i < BloquesDeA; i++):
 			BCurrentw = w(BCurrent)
 	ekse:
 		if ACurrent < sizeA-1:
-			if combined:
+			if combined or BCurrent >= sizeB-1:
 				BCurrent++
 				ACurrent++
 				peso += ACurrentw/BCurrentw
 				conectar(ACurrent, BCur	rent)
 				ACurrentw = w(ACurrent)
 				BCurrentw = w(BCurrent)
-			elif BCurrent < sizeB-1:
+			else:
 				BCurrent++;
                     		i--;
                     		conectar(A[ACurrent], B[BCurrent]);
                     		divided =1, combined=0;
-			else:
-				BCurrent++
-				ACurrent++
-				peso += ACurrentw/BCurrentw
-				conectar(ACurrent, BCur	rent)
-				ACurrentw = w(ACurrent)
-				BCurrentw = w(BCurrent)
 		else:
 			BCurrent++
 			ACurrent++
