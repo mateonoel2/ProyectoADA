@@ -33,7 +33,7 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
     bool divided = false, combined = false;
     conectar(A[0], B[0]);
     int ACurrent = 0, BCurrent = 0;
-    int ACWeigth = A[1], BCWeight = B[1];
+    int ACWeigth = A[0], BCWeight = B[0];
 
     for(int i = 1; i < sizeA; i++){
         if(BCurrent < sizeB-1 && ACurrent < sizeA-1){
@@ -61,13 +61,14 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
             }
             else{
                 if(ACurrent < sizeA-2){
-                    if(divided){
+                    if(combined){
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
                     }
                     else if(BCurrent < sizeB-2){
                         BCurrent++;
                         i--;
+                        BWeight += B[BCurrent];
                         conectar(A[ACurrent], B[BCurrent]);
                         divided =true, combined=false;
                     }else{
@@ -83,10 +84,12 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
         }
         else if (BCurrent == sizeB-1){
             ACurrent++;
+            ACWeigth += A[ACurrent]
             conectar(A[ACurrent], B[BCurrent]);
         }
         else{
             BCurrent++;
+            BCWeight += B[BCurrent];
             conectar(A[ACurrent], B[BCurrent]);
             if(BCurrent == sizeB-1) break;
         }
