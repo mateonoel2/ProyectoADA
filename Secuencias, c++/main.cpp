@@ -35,14 +35,14 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
     int ACurrent = 0, BCurrent = 0;
     int ACWeigth = A[0], BCWeight = B[0];
 
-    for(int i = 0; i < sizeA; i++){
+    for(int i = 2; i < sizeA; i++){
         if(BCurrent < sizeB-1 && ACurrent < sizeA-1){
-            if (!i)i++;
             if(ACWeigth < BCWeight){
                 if(ACurrent < sizeA -2){
                     if(divided  || ACWeigth + A[ACurrent+1] >= BCWeight) {
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
+                           i++;
                     }else{
                         combined = true; divided = false;
                         ACurrent++;
@@ -53,6 +53,7 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                 else{
                     weight += float(ACWeigth) / float(BCWeight);
                     ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
+                    i++;
                 }
             }
             else{
@@ -60,10 +61,10 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                     if(combined || BCurrent >= sizeB-2){
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
+                        i++;
                     }
                     else{
                         BCurrent++;
-                        i--;
                         BCWeight+= B[BCurrent];
                         conectar(A[ACurrent], B[BCurrent]);
                         divided =true, combined= false;
@@ -72,18 +73,17 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                 else{
                     weight += float(ACWeigth) / float(BCWeight);
                     ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
+                    i++;
                 }
             }
         }
         else if (BCurrent >= sizeB-1){
-            if(!i)i++;
             ACurrent++;
             ACWeigth += A[ACurrent];
             conectar(A[ACurrent], B[BCurrent]);
         }
         else{
             BCurrent++;
-            i--;
             BCWeight += B[BCurrent];
             conectar(A[ACurrent], B[BCurrent]);
             if(BCurrent == sizeB-1)break;
