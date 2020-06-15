@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-int p;
+int p,m,n;
 
 vector<pair<int,int>> matching_voraz;
 
@@ -28,21 +28,20 @@ void ResetConection(int &ACurrent, int &BCurrent, int &BCWeight, int&ACWeigth, v
 }
 
 float Min_voraz(const vector<int>& A,const vector<int>& B){
-    int sizeA = A.size(), sizeB = B.size();
     float weight = 0;
     bool divided = false, combined = false;
     conectar(A[0], B[0]);
     int ACurrent = 0, BCurrent = 0;
     int ACWeigth = A[0], BCWeight = B[0];
 
-    for(int i = 2; i < sizeA+sizeB; i++){
-        if(BCurrent < sizeB-1 && ACurrent < sizeA-1){
+    for(int i = 2; i < m+n; i++){
+        if(BCurrent < n-1 && ACurrent < m-1){
             if(ACWeigth < BCWeight){
-                if(ACurrent < sizeA -2){
+                if(ACurrent < m -2){
                     if(divided  || ACWeigth + A[ACurrent+1] >= BCWeight) {
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
-                           i++;
+                        i++;
                     }else{
                         combined = true; divided = false;
                         ACurrent++;
@@ -57,8 +56,8 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                 }
             }
             else{
-                if(ACurrent < sizeA-2){
-                    if(combined || BCurrent >= sizeB-2){
+                if(ACurrent < m-2){
+                    if(combined || BCurrent >= n-2){
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
                         i++;
@@ -77,7 +76,7 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                 }
             }
         }
-        else if (BCurrent >= sizeB-1){
+        else if (BCurrent >= n-1){
             ACurrent++;
             ACWeigth += A[ACurrent];
             conectar(A[ACurrent], B[BCurrent]);
@@ -86,7 +85,7 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
             BCurrent++;
             BCWeight += B[BCurrent];
             conectar(A[ACurrent], B[BCurrent]);
-            if(BCurrent == sizeB-1)break;
+            if(BCurrent == n-1)break;
         }
     }
     weight += float(ACWeigth) / float(BCWeight);
@@ -95,8 +94,6 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
 }
 
 float Min_recursivo(vector<int> A, vector<int> B, int a, int b){
-    int m = A.size();
-    int n = B.size();
     if (a==m-1){
         int sumB=0;
         for(int i=b; i<n; i++)
@@ -129,8 +126,6 @@ float Min_memoizado(vector<int> A, vector<int> B, int a, int b, float **M){
     if(bool(M[a][b]))
         return M[a][b];
 
-    int m = A.size();
-    int n = B.size();
     if (a==m-1){
         int sumB=0;
         for(int i=b; i<n; i++)
@@ -201,6 +196,9 @@ int main() {
     A_blocks = getBlocks(A);
     B_blocks = getBlocks(B);
 
+    m = A_blocks.size();
+    n = B_blocks.size();
+
     cout<<"Vector A: ";
     print_vector(A_blocks);
     cout<<"Vector B: ";
@@ -209,21 +207,18 @@ int main() {
 
     cout<<"Min_Matching_Voraz: "<<Min_voraz(A_blocks, B_blocks);
 
-    cout<<"\nMin_Matching_Recursivo: "<<Min_recursivo(A_blocks, B_blocks, 0, 0);
 
-    int m = A_blocks.size();
-    int n = B_blocks.size();
     float **M;
     M = new float *[m];
     for(int i = 0; i < m; i++)
         M[i] = new float[n];
 
-    for(int i=0; i<m; i++){
-        for(int j=0; j<n; j++){
+    for(int i=0; i<m; i++)
+        for(int j=0; j<n; j++)
             M[i][j] = 0;
-        }
-    }
+
     cout<<"\nMin_Matching_Memoizado: "<<Min_memoizado(A_blocks,B_blocks, 0, 0, M);
 
+    cout<<"\nMin_Matching_Recursivo: "<<Min_recursivo(A_blocks, B_blocks, 0, 0);
     return 0;
 }
