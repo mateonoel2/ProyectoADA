@@ -16,10 +16,26 @@
 
 \begin{document}
 	\maketitle
-	\subsection*{Pregunta 1 (Voraz)} 
+	\section{Introducción}
+	Para poder resolver el problema de Min-Matching con el uso de estos algoritmos primero decidimos convertir las cadenas de 0's y 1's en vectores de enteros.\\\\
+	Por ejemplo: Una cadena A=[00111001], será representada como A=\{3,1\}. \\\\
+	Nota: El código igual recibe como input el tamaño de las cadenas, p, y estas mismas. Solo que este las transformará a esta forma de representación.
 	
-	Recibe: ... \\
-	Devuelve: ...\\
+	
+	\subsection*{Pregunta 1 (Voraz)} 
+	Para el diseño de un algoritmo voraz, se partió desde la intención de elegir las conexiones analizando únicamente la situación actual, es decir en qué bloque de A o B estamos iterando. El objetivo del algoritmo es hallar el matching correcto entre los dos arrays que tenga el peso mínimo. Como se puede ver desde las fórmulas dadas, el peso de un Matching depende de una suma de pesos de diferentes conexiones. Entonces la estrategia voraz analizada deberá de buscar la manera de formar conexiones con el menor peso posible.
+	\\\\Estrategia: Armar conexiones minimizando el peso de estas.
+	\\\\Observando las fórmulas, podemos concluir que para minimizar el peso de estas, deberíamos procurar que la suma de los pesos de los bloques de B debe de ser mayor que las de A en cada conexión, para así minimizar el peso que resultará de la división. En base a esto, planteamos nuestra estrategia específica, la cual se basa en formar conexiones buscando dentro de lo posible que la suma de los bloques de A sea menos a la suma de los bloques de B.\\\\ Estrategia: Armar conexiones donde la suma de bloques de B sea menor que las de A.\\\\
+	A partir de este análisis planteamos un pseudocódigo basado en analizar, a medida que avanzamos por una de las listas, si en todo momento la suma de los pesos de A y B permiten seguir haciendo conexiones de tal manera que cumpla con la estrategia. En caso contrario, se aplicaría un Reset Connection, que terminaría esa conexión e iniciaría una nueva a partir de los siguientes bloques. Se añadió las condiciones de combined y divided para evitar interferir con la condición del problema, donde un bloque de A no puede ser agrupado y dividido a la vez.
+	
+	Recibe: 
+	\begin{itemize}
+		\item Vectores A y B
+	\end{itemize}
+	Devuelve: 
+	\begin{itemize}
+		\item Float min-matching
+	\end{itemize}
 	\begin{algorithmic}[1]
 		\TITLE{\textsc{Min-Matching-Voraz}$(A, B)$}
 		\algcost{\textit{cost}}{\textit{times}}
@@ -85,57 +101,74 @@
 	\STATE conectar(ACurrent, BCurrent)
 	\STATE ACurrentw = w(ACurrent) 
 	\STATE BCurrentw = w(BCurrent)
-\end{algorithmic}
+	\end{algorithmic}
 
+-----------\\\\
+	\textbf{Análisis de Tiempo}\\
+	Como podemos observar en el código, la mayoría de las instrucciones dependen de un costo constante y se repetiría las veces que se ejecute la línea del bucle.\\Este bucle itera el array de bloques de A de tamaño m, por lo que se podría decir que todo el código en sí depende del tamaño de este array:\\
+	
+	$T(m, n) = c1 * m$\\\\
+	Sin embargo, este bucle no siempre se va a repetir m veces. Pues en la línea 29 y 40, podemos ver que cuando la iteración elige avanzar en un bloque de B, este resta uno al iterador i, “pausando” la iteración mientras avanza en el array de B. Luego, considerando esto, podemos decir que en los casos en que n > m, el número de veces que el bucle se repetirá dependerá de qué tan largo es el bloque B:\\
+	
+	$T(m,n) = c2 * n$\\\\
+	De ambas ecuaciones, usadas en los casos en que m $>$ n y n $>$ m respectivamente, podemos concluir que el tiempo de ejecución dependerá de qué array de bloques sea más largo, y al depender de una constante, podemos acotar el tiempo de ejecución de la siguiente manera:\\\\
+	
+	$T(m,n) = O(max\{m,n\})$
+	
 
 	\subsection*{Pregunta 2 (Recurrencia)}
+	Para plantear el problema con recursividad, y con los conocimientos que se obtuvo al realizar el primer problema, nos dimos cuenta de que el solo añadir un bloque diferente, podría ocasionar en ciertos casos la reestructuración de todas las conexiones realizadas previamente. Por este motivo, no era posible realizar una recurrencia donde el resultado de OPT(i,j) esté relacionado directamente con una respuesta anterior. Por lo tanto, para el diseño de la recurrencia, se tomó en cuenta el uso de la recurrencia únicamente para mapear todas las combinaciones posibles del problema partiendo desde los casos iniciales, para posteriormente comparar cada una de ellas y elegir la más óptima, es decir para el problema. Por razones obvias, esta recurrencia es muy costosa en cuanto a recursos y tiempo.
+	\\\\
+	Donde m = A.size y n = B.size
 	\begin{equation*}
 	OPT(i,j) =
 	\begin{cases}
-	A_1 / \sum_{x=j}^{B.size}B_x & A.size = 1\\\\
-	\sum_{x=i}^{A.size}A_x / B_1 & B.size = 1\\\\
+	A_i / \sum_{x=j}^{n-1}B_x & i = m-1\\\\
+	\sum_{x=i}^{m-1}A_x / B_j & j = n-1\\\\
 	min(\\
-	min_{w=1}^{m-1}( \sum_{x=1}^{w}A_x/ B_1 + OPT(w+1, 2))\\
-	min_{w=1}^{n-1}(A_1/\sum_{x=1}^{w}B_x + OPT(2,w+1))\\
+	min_{w=i}^{m-2}( \sum_{x=i}^{w}A_x/ B_j + OPT(w+1, j+1))\\
+	min_{w=j}^{n-2}(A_i/\sum_{x=j}^{w}B_x + OPT(i+1,w+1))\\
 	) & \text{caso contrário}
 	\end{cases}
 	\end{equation*}
 	\subsection*{Pregunta 3 (Recursivo) }
+	Utilizando la recursividad planteada en la pregunta anterior, se pasó a ejecutar un algoritmo recursivo, donde utilizamos la recurrencia planteada para elegir el caso más óptimo para cada combinación de bloques de longitud m y n posibles con los inputs dados.\\\\
 	Recibe:
 	\begin{itemize}
-		\item m = tamaño de A
-		\item n= tamaño de B
+		\item a = donde iniciará A
+		\item b = donde iniciará B
+		\item vector A y B
 	\end{itemize}
 	Devuelve: 
 	\begin{itemize}
-		\item 	Peso del min-matching
+		\item 	Float min-matching
 	\end{itemize}
 	\begin{algorithmic}[1]
 		\TITLE{\textsc{Min-Matching-Recursivo}$(A, B, a, b)$}
 		\algcost{\textit{cost}}{\textit{times}}
-		\STATE A = [a, ... , m]\algcost{$.$}{$.$}
-		\STATE B = [b, ... , n]\algcost{$.$}{$.$}
-		\IF{m = 1 \algcost{$.$}{$.$}}  
-		\STATE return $A_1 / \sum_{x=1}^{n}B_x$ \algcost{$.$}{$.$}
+		\IF{a = m-1  \algcost{$.$}{$.$}}  
+		\STATE return $A_a / \sum_{x=b}^{n-1}B_x$ \algcost{$.$}{$.$}
 		\ENDIF 
-		\IF{n = 1 \algcost{$.$}{$.$}} 
-		\STATE return $\sum_{x=1}^{m}A_x / B_1$ \algcost{$.$}{$.$}
+		\IF{b = n-1 \algcost{$.$}{$.$}} 
+		\STATE return $\sum_{x=a}^{m}A_x / B_b$ \algcost{$.$}{$.$}
 		\ENDIF 
 		\STATE vector$<$int$>$ posibles \algcost{$.$}{$.$}
-		\FOR{$i=1$ TO $m-1$ \algcost{$.$}{$.$}}
-		\STATE p = $\sum_{x=1}^{i}A_x/ B_1 + $ \\
-		$\text{Min-Matching-Recursivo}(A, B, i+1, 2)$ \algcost{$.$}{$.$}
+		\FOR{$i=a$ TO $m-2$ \algcost{$.$}{$.$}}
+		\STATE p = $\sum_{x=a}^{i}A_x/ B_b + $ \\
+		$\text{Min-Match-Rec}(A, B, i+1, b+1)$ \algcost{$.$}{$.$}
 		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
 		\ENDFOR
-		\FOR{$i=1$ TO $n-1$ \algcost{$.$}{$.$}}
-		\STATE p = $A_1 / \sum_{x=1}^{i}B_x + $ \\
-		$\text{Min-Matching-Recursivo}(A, B, 2, i+1)$ \algcost{$.$}{$.$}
+		\FOR{$i=b$ TO $n-2$ \algcost{$.$}{$.$}}
+		\STATE p = $A_a / \sum_{x=b}^{i}B_x + $ \\
+		$\text{Min-Match-Rec}(A, B, a+1, i+1)$ \algcost{$.$}{$.$}
 		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
 		\ENDFOR
 		\STATE return min(posibles)  \algcost{$.$}{$.$}
 	\end{algorithmic}
 
 	\subsection*{Pregunta 4 (Memoizado)}
+	Partiendo desde el código anterior, se le añadirá únicamente el cambio de consulta de memoria del algoritmo, implementada a modo de una matriz. Antes de entrar a cálculos de la recursividad compleja, se consultará si el resultado ya ha sido calculado previamente. Además, en caso se ejecute con una combinación de parámetros que aún no ha sido calculada como solución, se almacenará esta solución a la matriz de memoria. De esta forma, luego de las ejecuciones iniciales, cualquier ejecución del algoritmo con una combinación de parámetros ya calculada, tendrá un tiempo de ejecución constante.
+	\\\\
 		Recibe:
 		\begin{itemize}
 			\item m = tamaño de A
@@ -147,31 +180,31 @@
 			\item 	Peso del min-matching
 		\end{itemize}
 	\begin{algorithmic}[1]
-		\TITLE{\textsc{Min-Matching-Memoizado}$(A, B, a, b)$}
+		\TITLE{\textsc{Min-Matching-Memoizado}$(A, B, a, b, M)$}
 		\algcost{\textit{cost}}{\textit{times}}
-		\IF{Matriz[a][b] 	\algcost{$.$}{$.$}}
-		\STATE return Matriz[a][b]	\algcost{$.$}{$.$}
+		\IF{M[a][b] 	\algcost{$.$}{$.$}}
+		\STATE return M[a][b]	\algcost{$.$}{$.$}
 		\ENDIF
-		\STATE A = [a, ... , m]\algcost{$.$}{$.$}
-		\STATE B = [b, ... , n]\algcost{$.$}{$.$}
-		\IF{m = 1 \algcost{$.$}{$.$}}  
-		\STATE return $A_1 / \sum_{x=1}^{n}B_x$ \algcost{$.$}{$.$}
+		\IF{a = m-1  \algcost{$.$}{$.$}}  
+		\STATE M[a][b] $= A_a / \sum_{x=b}^{n-1}B_x$ \algcost{$.$}{$.$}
+		\STATE return M[a][b] \algcost{$.$}{$.$}
 		\ENDIF 
-		\IF{n = 1 \algcost{$.$}{$.$}} 
-		\STATE return $\sum_{x=1}^{m}A_x / B_1$ \algcost{$.$}{$.$}
+		\IF{b = n-1 \algcost{$.$}{$.$}} 
+		\STATE M[a][b] $= \sum_{x=a}^{m}A_x / B_b$ \algcost{$.$}{$.$}
+		\STATE return M[a][b] \algcost{$.$}{$.$}
 		\ENDIF 
 		\STATE vector$<$int$>$ posibles \algcost{$.$}{$.$}
-		\FOR{$i=1$ TO $m-1$ \algcost{$.$}{$.$}}
-		\STATE p = $\sum_{x=1}^{i}A_x/ B_1 + $ \\
-		$\text{Min-Matching-Memoizado}(A, B, i+1, 2)$ \algcost{$.$}{$.$}
+		\FOR{$i=a$ TO $m-2$ \algcost{$.$}{$.$}}
+		\STATE p = $\sum_{x=a}^{i}A_x/ B_b + $ \\
+		$\text{Min-Match-Mem}(A, B, i+1, b+1,M)$ \algcost{$.$}{$.$}
 		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
 		\ENDFOR
-		\FOR{$i=1$ TO $n-1$ \algcost{$.$}{$.$}}
-		\STATE p = $A_1 / \sum_{x=1}^{i}B_x + $ \\
-	  	$\text{Min-Matching-Memoizado}(A, B, 2, i+1)$ \algcost{$.$}{$.$}
+		\FOR{$i=b$ TO $n-2$ \algcost{$.$}{$.$}}
+		\STATE p = $A_a / \sum_{x=b}^{i}B_x + $ \\
+		$\text{Min-Match-Mem}(A, B, a+1, i+1,M)$ \algcost{$.$}{$.$}
 		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
 		\ENDFOR
-		\STATE Matriz[a][b] = min(posibles)
-		\STATE return Matriz[a][b]  \algcost{$.$}{$.$}
+		\STATE M[a][b] = min(posibles)
+		\STATE return M[a][b]  \algcost{$.$}{$.$}
 	\end{algorithmic}
 \end{document}
