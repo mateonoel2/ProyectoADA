@@ -39,19 +39,15 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
         if(BCurrent < sizeB-1 && ACurrent < sizeA-1){
             if(ACWeigth < BCWeight){
                 if(ACurrent < sizeA -2){
-                    if(divided) {
+                    if(divided || ACWeigth + A[i] >= BCWeight) {
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
                     }
-                    else if (ACWeigth + A[i] < BCWeight){
+                    else{
                         combined = true; divided = false;
                         ACurrent++;
                         conectar(A[ACurrent], B[BCurrent]);
                         ACWeigth+=A[ACurrent];
-                    }
-                    else{
-                        weight += float(ACWeigth) / float(BCWeight);
-                        ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
                     }
                 }
                 else{
@@ -61,19 +57,16 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
             }
             else{
                 if(ACurrent < sizeA-2){
-                    if(combined){
+                    if(combined || BCurrent >= sizeB-2 ){
                         weight += float(ACWeigth) / float(BCWeight);
                         ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
                     }
-                    else if(BCurrent < sizeB-2){
+                    else{
                         BCurrent++;
                         i--;
                         BWeight += B[BCurrent];
                         conectar(A[ACurrent], B[BCurrent]);
                         divided =true, combined=false;
-                    }else{
-                        weight += float(ACWeigth) / float(BCWeight);
-                        ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
                     }
                 }
                 else{
