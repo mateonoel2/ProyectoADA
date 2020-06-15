@@ -64,7 +64,7 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                     else{
                         BCurrent++;
                         i--;
-                        BWeight += B[BCurrent];
+                        BCWeight += B[BCurrent];
                         conectar(A[ACurrent], B[BCurrent]);
                         divided =true, combined=false;
                     }
@@ -77,7 +77,7 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
         }
         else if (BCurrent == sizeB-1){
             ACurrent++;
-            ACWeigth += A[ACurrent]
+            ACWeigth += A[ACurrent];
             conectar(A[ACurrent], B[BCurrent]);
         }
         else{
@@ -127,7 +127,6 @@ float Min_recursivo(vector<int> A, vector<int> B, int a, int b){
 float Min_memoizado(vector<int> A, vector<int> B, int a, int b, float **M){
     if(bool(M[a][b]))
         return M[a][b];
-
     A.erase(A.begin(), A.begin() + a);
     B.erase(B.begin(), B.begin() + b);
     int m = A.size();
@@ -157,10 +156,6 @@ float Min_memoizado(vector<int> A, vector<int> B, int a, int b, float **M){
             sumB = sumB+B[j];
         posibles.push_back(float(A[0])/float(sumB) + Min_recursivo(A,B,1,i));
     }
-
-
-
-
     M[a][b] = *min_element(posibles.begin(), posibles.end());
     return M[a][b];
 }
