@@ -35,21 +35,22 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
     int ACurrent = 0, BCurrent = 0;
     int ACWeigth = A[0], BCWeight = B[0];
 
-    for(int i = 0; i < sizeA; i++){
+   for(int i = 0; i < sizeA; i++){
+        //Comprobamos que no estemos en el último elemento
         if(BCurrent < sizeB-1 && ACurrent < sizeA-1){
-            if(!i)i++;
+            if (!i)i++;
+            //Si el peso de A es menor que el de B, evaluamos si conviene o no meter otro A.
             if(ACWeigth < BCWeight){
                 if(ACurrent < sizeA -2){
-                    if(divided || ACWeigth + A[i] >= BCWeight) {
-                        weight += float(ACWeigth) / float(BCWeight);
-                        ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
-                    }
-                    else{
-                        combined = true; divided = false;
-                        ACurrent++;
-                        conectar(A[ACurrent], B[BCurrent]);
-                        ACWeigth+=A[ACurrent];
-                    }
+                if(divided  || ACWeigth + A[ACurrent+1] >= BCWeight) { //Para evitar que una conexión sea agrupada y dividida a la vez.
+                    weight += float(ACWeigth) / float(BCWeight);
+                    ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
+                }else{ //Acá si combiene agregar más As.
+                    combined = 1; divided = 0;
+                    ACurrent++;
+                    conectar(A[ACurrent], B[BCurrent]);
+                    ACWeigth+=A[ACurrent];
+                }
                 }
                 else{
                     weight += float(ACWeigth) / float(BCWeight);
@@ -57,18 +58,19 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                 }
             }
             else{
+                //Si el peso ed A es mayor al de B, analizamos si se puede agregar más Bs.
                 if(ACurrent < sizeA-2){
-                    if(combined || BCurrent >= sizeB-2 ){
-                        weight += float(ACWeigth) / float(BCWeight);
-                        ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
-                    }
-                    else{
-                        BCurrent++;
-                        i--;
-                        BCWeight += B[BCurrent];
-                        conectar(A[ACurrent], B[BCurrent]);
-                        divided =true, combined=false;
-                    }
+                if(combined || BCurrent >= sizeB-2){
+                    weight += float(ACWeigth) / float(BCWeight);
+                    ResetConection(ACurrent, BCurrent, BCWeight, ACWeigth, A, B, divided, combined, weight);
+                }
+                else{
+                    BCurrent++;
+                    i--;
+                    BCWeight+= B[BCurrent];
+                    conectar(A[ACurrent], B[BCurrent]);
+                    divided =1, combined=0;
+                }
                 }
                 else{
                     weight += float(ACWeigth) / float(BCWeight);
@@ -76,23 +78,29 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
                 }
             }
         }
-        else if (BCurrent == sizeB-1){
+        //Cuando A sea el último elemento, se conecta a todos los B restantes.
+        else if (BCurrent >= sizeB-1){
             if(!i)i++;
             ACurrent++;
             ACWeigth += A[ACurrent];
             conectar(A[ACurrent], B[BCurrent]);
         }
+        //Cuando B sea el último elemento, se conecta a todos los A restantes.
         else{
             BCurrent++;
+            i--;
             BCWeight += B[BCurrent];
             conectar(A[ACurrent], B[BCurrent]);
-            if(BCurrent == sizeB-1) break;
+            if(BCurrent == sizeB-1)break;
         }
     }
     weight += float(ACWeigth) / float(BCWeight);
+
+    for(auto c : Matching){
+        cout << c.first << "," << c.second << endl;
+    }
     return weight;
 }
-
 float Min_recursivo(vector<int> A, vector<int> B, int a, int b){
     A.erase(A.begin(), A.begin() + a);
     B.erase(B.begin(), B.begin() + b);
