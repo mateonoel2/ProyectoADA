@@ -17,7 +17,7 @@ ACurrent = 1
 for(i = 2; i < BloquesDeA; i++):
     if BCurrent < sizeB and ACurrent < sizeA:
         if Acurrentw < Bcurrentw:
-		if ACurrent < p-1:
+		if ACurrent < sizeA-1:
 			if divided:
 				BCurrent++
 				ACurrent++
