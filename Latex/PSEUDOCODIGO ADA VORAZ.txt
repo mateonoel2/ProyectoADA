@@ -1,5 +1,7 @@
-MIN-MATCHING-VORAZ(A, B, p): //p = tamaño de A
+MIN-MATCHING-VORAZ(A, B):
 
+sizeA = A.size()
+sizeB = B.size()
 formarBloques(A)
 formarBloques(B)
 Divided = 0
@@ -13,7 +15,7 @@ BCurrent = 1
 ACurrent = 1
 
 for(i = 2; i < BloquesDeA; i++):
-    if BCurrent < p and ACurrent < p:
+    if BCurrent < sizeB and ACurrent < sizeA:
         if Acurrentw < Bcurrentw:
 		if ACurrent < p-1:
 			if divided:
@@ -45,7 +47,7 @@ for(i = 2; i < BloquesDeA; i++):
 			ACurrentw = w(ACurrent)
 			BCurrentw = w(BCurrent)
 	ekse:
-		if ACurrent < p-1:
+		if ACurrent < sizeA-1:
 			if divided:
 				BCurrent++
 				ACurrent++
@@ -53,7 +55,7 @@ for(i = 2; i < BloquesDeA; i++):
 				conectar(ACurrent, BCur	rent)
 				ACurrentw = w(ACurrent)
 				BCurrentw = w(BCurrent)
-			elif BCurrent < p-1:
+			elif BCurrent < sizeB-1:
 				BCurrent++;
                     		i--;
                     		conectar(A[ACurrent], B[BCurrent]);
@@ -72,7 +74,7 @@ for(i = 2; i < BloquesDeA; i++):
 			conectar(ACurrent, BCur	rent)
 			ACurrentw = w(ACurrent)
 			BCurrentw = w(BCurrent)
-    elif BCurrent == p:
+    elif BCurrent == sizeB:
 	ACurrent++;
         conectar(A[ACurrent], B[BCurrent]);
     else:
