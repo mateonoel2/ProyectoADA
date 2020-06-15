@@ -1,0 +1,87 @@
+MIN-MATCHING-VORAZ(A, B, p): //p = tamaño de A
+
+formarBloques(A)
+formarBloques(B)
+Divided = 0
+Combined = 0
+peso = 0
+
+Conectar(1,1)
+BCurrentw = w(B1)
+ACurrentw = w(A1)
+BCurrent = 1
+ACurrent = 1
+
+for(i = 2; i < BloquesDeA; i++):
+    if BCurrent < p and ACurrent < p:
+        if Acurrentw < Bcurrentw:
+		if ACurrent < p-1:
+			if divided:
+				BCurrent++
+				ACurrent++
+				conectar(ACurrent, BCur	rent)
+				ACurrentw = w(ACurrent)
+				BCurrentw = w(BCurrent)
+
+			elif Acurrentw + w(Ai) < Bcurrentw:
+                		conectar(i, BCurrent)
+                		ACurrentw = ACurrentw + w(Ai)
+				ACurrent = i
+				combined = 1
+				divided = 0
+	
+	   		else:
+				BCurrent++
+				ACurrent++
+				peso += ACurrentw/BCurrentw
+				conectar(ACurrent, BCur	rent)
+				ACurrentw = w(ACurrent)
+				BCurrentw = w(BCurrent)
+		else:
+			BCurrent++
+			ACurrent++
+			peso += ACurrentw/BCurrentw
+			conectar(ACurrent, BCur	rent)
+			ACurrentw = w(ACurrent)
+			BCurrentw = w(BCurrent)
+	ekse:
+		if ACurrent < p-1:
+			if divided:
+				BCurrent++
+				ACurrent++
+				peso += ACurrentw/BCurrentw
+				conectar(ACurrent, BCur	rent)
+				ACurrentw = w(ACurrent)
+				BCurrentw = w(BCurrent)
+			elif BCurrent < p-1:
+				BCurrent++;
+                    		i--;
+                    		conectar(A[ACurrent], B[BCurrent]);
+                    		divided =1, combined=0;
+			else:
+				BCurrent++
+				ACurrent++
+				peso += ACurrentw/BCurrentw
+				conectar(ACurrent, BCur	rent)
+				ACurrentw = w(ACurrent)
+				BCurrentw = w(BCurrent)
+		else:
+			BCurrent++
+			ACurrent++
+			peso += ACurrentw/BCurrentw
+			conectar(ACurrent, BCur	rent)
+			ACurrentw = w(ACurrent)
+			BCurrentw = w(BCurrent)
+    elif BCurrent == p:
+	ACurrent++;
+        conectar(A[ACurrent], B[BCurrent]);
+    else:
+	BCurrent++;
+            conectar(A[ACurrent], B[BCurrent]);
+            if(BCurrent == sizeB-1)break;
+
+peso += ACurrentw/BCurrentw
+
+return peso;
+            
+
