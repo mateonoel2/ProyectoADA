@@ -18,27 +18,19 @@ for(i = 2; i < BloquesDeA; i++):
     if BCurrent < sizeB and ACurrent < sizeA:
         if Acurrentw < Bcurrentw:
 		if ACurrent < sizeA-1:
-			if divided:
+			if divided or Acurrentw + w(Ai) >= Bcurrentw::
 				BCurrent++
 				ACurrent++
 				conectar(ACurrent, BCur	rent)
 				ACurrentw = w(ACurrent)
 				BCurrentw = w(BCurrent)
 
-			elif Acurrentw + w(Ai) < Bcurrentw:
+			else Acurrentw + w(Ai) < Bcurrentw:
                 		conectar(i, BCurrent)
                 		ACurrentw = ACurrentw + w(Ai)
 				ACurrent = i
 				combined = 1
 				divided = 0
-	
-	   		else:
-				BCurrent++
-				ACurrent++
-				peso += ACurrentw/BCurrentw
-				conectar(ACurrent, BCur	rent)
-				ACurrentw = w(ACurrent)
-				BCurrentw = w(BCurrent)
 		else:
 			BCurrent++
 			ACurrent++
