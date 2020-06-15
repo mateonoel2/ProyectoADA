@@ -1,7 +1,145 @@
 \documentclass{article}
+\usepackage[noend]{algorithmic}
+\usepackage{mathtools}
+
 \title{Proyecto ADA, primer entregable}
 \author{Jean Miraval y  Mateo Noel}
 
+
+\newcommand{\TITLE}[1]{\item[#1]}
+\renewcommand{\algorithmiccomment}[1]{$/\!/$ \parbox[t]{4.5cm}{\raggedright #1}}
+\newbox\fixbox
+\renewcommand{\algorithmicdo}{\setbox\fixbox\hbox{\ {} }\hskip-\wd\fixbox}
+\renewcommand{\algorithmicthen}{\setbox\fixbox\hbox{\ {} }\hskip-\wd\fixbox}
+\newcommand{\algcost}[2]{\strut\hfill\makebox[1.5cm][l]{#1}\makebox[4cm][l]{#2}}
+
+
 \begin{document}
 	\maketitle
+	\subsection*{Pregunta 1 (Voraz)} 
+	Recibe: ... \\
+	Devuelve: ...
+	
+	\begin{algorithmic}[1]
+		\TITLE{\textsc{Min-Matching-Voraz}$(A, B)$}
+		\algcost{\textit{cost}}{\textit{times}}
+		\STATE Divided=0 \algcost{$.$}{$.$}
+		\STATE Combined=0 \algcost{$.$}{$.$}
+		\STATE Peso=0 \algcost{$.$}{$.$} 
+		\STATE BCurrentw = w(B1) \algcost{$.$}{$.$} 
+		\STATE ACurrentw = w(A1) \algcost{$.$}{$.$} 
+		\STATE BCurrent = 1 \algcost{$.$}{$.$} 
+		\STATE ACurrent = 1\algcost{$.$}{$.$} 
+		\FOR{$i=2$ TO $m$}  
+			if BCurrent < p and ACurrent < p:
+		
+		
+		\IF{condicion \algcost{$.$}{$.$}} 
+		\STATE hacer algo
+		\ENDIF 
+		\STATE \textsc{Llamada-Subrutina}$(.,.)$ \algcost{$.$}{$.$}
+		\STATE $asignacioni = asignaciond$  
+		\algcost{$.$}{$.$}
+		\STATE \COMMENT{Un comentario $a$}
+		%   \algcost{$0$}{$.$}
+		\WHILE{condicion \AND condicion
+		\algcost{$.$}{$.$}}
+		\STATE hacer algo
+		\algcost{$.$}{$.$}
+		\STATE hacer algo
+		\algcost{$.$}{$.$}
+		\ENDWHILE
+		\STATE hacer algo
+		\algcost{$.$}{$.$}
+		\FOR{$i=1$ TO $n$}  
+		\STATE hacer algo
+		\ENDFOR
+	\end{algorithmic}
+
+	\subsection*{Pregunta 2 (Recurrencia)}
+	\begin{equation*}
+	OPT(i,j) =
+	\begin{cases}
+	A_1 / \sum_{x=j}^{B.size}B_x & A.size = 1\\\\
+	\sum_{x=i}^{A.size}A_x / B_1 & B.size = 1\\\\
+	min(\\
+	min_{w=1}^{m-1}( \sum_{x=1}^{w}A_x/ B_1 + OPT(w+1, 2))\\
+	min_{w=1}^{n-1}(A_1/\sum_{x=1}^{w}B_x + OPT(2,w+1))\\
+	) & \text{caso contrário}
+	\end{cases}
+	\end{equation*}
+	\subsection*{Pregunta 3 (Recursivo) }
+	Recibe:
+	\begin{itemize}
+		\item m = tamaño de A
+		\item n= tamaño de B
+	\end{itemize}
+	Devuelve: 
+	\begin{itemize}
+		\item 	Peso del min-matching
+	\end{itemize}
+	\begin{algorithmic}[1]
+		\TITLE{\textsc{Min-Matching-Recursivo}$(A, B, a, b)$}
+		\algcost{\textit{cost}}{\textit{times}}
+		\STATE A = [a, ... , m]\algcost{$.$}{$.$}
+		\STATE B = [b, ... , n]\algcost{$.$}{$.$}
+		\IF{m = 1 \algcost{$.$}{$.$}}  
+		\STATE return $A_1 / \sum_{x=1}^{n}B_x$ \algcost{$.$}{$.$}
+		\ENDIF 
+		\IF{n = 1 \algcost{$.$}{$.$}} 
+		\STATE return $\sum_{x=1}^{m}A_x / B_1$ \algcost{$.$}{$.$}
+		\ENDIF 
+		\STATE vector$<$int$>$ posibles \algcost{$.$}{$.$}
+		\FOR{$i=1$ TO $m-1$ \algcost{$.$}{$.$}}
+		\STATE p = $\sum_{x=1}^{i}A_x/ B_1 + $ \\
+		$\text{Min-Matching-Recursivo}(A, B, i+1, 2)$ \algcost{$.$}{$.$}
+		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
+		\ENDFOR
+		\FOR{$i=1$ TO $n-1$ \algcost{$.$}{$.$}}
+		\STATE p = $A_1 / \sum_{x=1}^{i}B_x + $ \\
+		$\text{Min-Matching-Recursivo}(A, B, 2, i+1)$ \algcost{$.$}{$.$}
+		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
+		\ENDFOR
+		\STATE return min(posibles)  \algcost{$.$}{$.$}
+	\end{algorithmic}
+
+	\subsection*{Pregunta 4 (Memoizado)}
+		Recibe:
+		\begin{itemize}
+			\item m = tamaño de A
+			\item n= tamaño de B
+			\item Matriz[m][n]
+		\end{itemize}
+		Devuelve: 
+		\begin{itemize}
+			\item 	Peso del min-matching
+		\end{itemize}
+	\begin{algorithmic}[1]
+		\TITLE{\textsc{Min-Matching-Memoizado}$(A, B, a, b)$}
+		\algcost{\textit{cost}}{\textit{times}}
+		\IF{Matriz[a][b] 	\algcost{$.$}{$.$}}
+		\STATE return Matriz[a][b]	\algcost{$.$}{$.$}
+		\ENDIF
+		\STATE A = [a, ... , m]\algcost{$.$}{$.$}
+		\STATE B = [b, ... , n]\algcost{$.$}{$.$}
+		\IF{m = 1 \algcost{$.$}{$.$}}  
+		\STATE return $A_1 / \sum_{x=1}^{n}B_x$ \algcost{$.$}{$.$}
+		\ENDIF 
+		\IF{n = 1 \algcost{$.$}{$.$}} 
+		\STATE return $\sum_{x=1}^{m}A_x / B_1$ \algcost{$.$}{$.$}
+		\ENDIF 
+		\STATE vector$<$int$>$ posibles \algcost{$.$}{$.$}
+		\FOR{$i=1$ TO $m-1$ \algcost{$.$}{$.$}}
+		\STATE p = $\sum_{x=1}^{i}A_x/ B_1 + $ \\
+		$\text{Min-Matching-Memoizado}(A, B, i+1, 2)$ \algcost{$.$}{$.$}
+		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
+		\ENDFOR
+		\FOR{$i=1$ TO $n-1$ \algcost{$.$}{$.$}}
+		\STATE p = $A_1 / \sum_{x=1}^{i}B_x + $ \\
+	  	$\text{Min-Matching-Memoizado}(A, B, 2, i+1)$ \algcost{$.$}{$.$}
+		\STATE posibles.push\_back(p) \algcost{$.$}{$.$}
+		\ENDFOR
+		\STATE Matriz[a][b] = min(posibles)
+		\STATE return Matriz[a][b]  \algcost{$.$}{$.$}
+	\end{algorithmic}
 \end{document}
