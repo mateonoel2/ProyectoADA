@@ -35,7 +35,7 @@ float Min_voraz(const vector<int>& A,const vector<int>& B){
     int ACurrent = 0, BCurrent = 0;
     int ACWeigth = A[0], BCWeight = B[0];
 
-    for(int i = 2; i < sizeA; i++){
+    for(int i = 2; i < sizeA+sizeB; i++){
         if(BCurrent < sizeB-1 && ACurrent < sizeA-1){
             if(ACWeigth < BCWeight){
                 if(ACurrent < sizeA -2){
