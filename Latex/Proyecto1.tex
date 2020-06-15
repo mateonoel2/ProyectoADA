@@ -17,9 +17,9 @@
 \begin{document}
 	\maketitle
 	\subsection*{Pregunta 1 (Voraz)} 
-	Recibe: ... \\
-	Devuelve: ...
 	
+	Recibe: ... \\
+	Devuelve: ...\\
 	\begin{algorithmic}[1]
 		\TITLE{\textsc{Min-Matching-Voraz}$(A, B)$}
 		\algcost{\textit{cost}}{\textit{times}}
@@ -28,33 +28,65 @@
 		\STATE Peso=0 \algcost{$.$}{$.$} 
 		\STATE BCurrentw = w(B1) \algcost{$.$}{$.$} 
 		\STATE ACurrentw = w(A1) \algcost{$.$}{$.$} 
+		\STATE Conectar(1,1) \algcost{$.$}{$.$} 
 		\STATE BCurrent = 1 \algcost{$.$}{$.$} 
 		\STATE ACurrent = 1\algcost{$.$}{$.$} 
-		\FOR{$i=2$ TO $m$}  
-			if BCurrent < p and ACurrent < p:
-		
-		
-		\IF{condicion \algcost{$.$}{$.$}} 
-		\STATE hacer algo
-		\ENDIF 
-		\STATE \textsc{Llamada-Subrutina}$(.,.)$ \algcost{$.$}{$.$}
-		\STATE $asignacioni = asignaciond$  
-		\algcost{$.$}{$.$}
-		\STATE \COMMENT{Un comentario $a$}
-		%   \algcost{$0$}{$.$}
-		\WHILE{condicion \AND condicion
-		\algcost{$.$}{$.$}}
-		\STATE hacer algo
-		\algcost{$.$}{$.$}
-		\STATE hacer algo
-		\algcost{$.$}{$.$}
-		\ENDWHILE
-		\STATE hacer algo
-		\algcost{$.$}{$.$}
-		\FOR{$i=1$ TO $n$}  
-		\STATE hacer algo
+		\FOR{$i=2$ TO sizeA}  
+		\IF {BCurrent $<$ sizeB and ACurrent $<$ sizeA}
+		\IF {ACurrentW $<$ BCurrentW}
+		\IF {ACurrent $<$ sizeA-1}
+		\IF {Divided or Acurrentw + w(Ai) $>=$ Bcurrentw}
+		\STATE \textsc{reset-conection}$(...)$ 
+		\ELSE 
+		\STATE conectar(i,BCurrent)
+		\STATE	ACurrentw = ACurrentw + w(Ai)
+		\STATE	ACurrent = i
+		\STATE	combined = 1
+		\STATE	divided = 0
+		\ENDIF
+		\ELSE 
+		\STATE \textsc{reset-conection}$(...)$ 
+		\ENDIF
+		\ELSE
+		\IF {ACurrent $<$ sizeA-1}
+		\IF {if combined or BCurrent $>=$ sizeB-1}
+		\STATE \textsc{reset-conection}$(...)$ 
+		\ELSE 
+		\STATE BCurrent++
+		\STATE i--
+		\STATE conectar(A[ACurrent], B[BCurrent])
+		\STATE divided =1
+		\STATE combined=0
+		\ENDIF
+		\ELSE
+		\STATE  \textsc{reset-conection}$(...)$ 
+		\ENDIF
+		\ELSIF{BCurrent ==sizeB}
+		\STATE ACurrent++
+		\STATE conectar(A[ACurrent], B[BCurrent])
+		\ELSE 
+			\STATE BCurrent++;
+			\STATE conectar(A[ACurrent], B[BCurrent]);
+		\IF {BCurrent == sizeB-1} 
+		\STATE break
+		\ENDIF
+		\ENDIF
+		\ENDIF
 		\ENDFOR
+		\STATE peso += ACurrentw/BCurrentw
+		\STATE return peso
 	\end{algorithmic}
+
+	\begin{algorithmic}[1] 
+	\TITLE{\textsc{Reset-conection}$( ... )$}
+	\STATE BCurrent++
+	\STATE ACurrent++
+	\STATE peso += ACurrentw / BCurrentw 
+	\STATE conectar(ACurrent, BCurrent)
+	\STATE ACurrentw = w(ACurrent) 
+	\STATE BCurrentw = w(BCurrent)
+\end{algorithmic}
+
 
 	\subsection*{Pregunta 2 (Recurrencia)}
 	\begin{equation*}
