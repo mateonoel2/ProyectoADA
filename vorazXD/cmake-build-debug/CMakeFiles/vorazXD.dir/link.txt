@@ -1,0 +1,1 @@
+/home/linuxbrew/.linuxbrew/bin/c++  -g   CMakeFiles/vorazXD.dir/main.cpp.o  -o vorazXD 

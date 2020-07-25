@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jpalexander1706/CLionProjects/vorazXD/main.cpp
+iostream
+-
+fstream
+-
+vector
+-
+string
+-
+cmath
+-
+unistd.h
+-
+utility
+-
+cmath
+-
+climits
+-
+
