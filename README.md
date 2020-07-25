@@ -6,7 +6,7 @@ En la carpeta python se encuentra el código que se utilizó para procesar imág
 
 ----------Secuencias, c++
 
-Esta carpeta contiene una implementacin en C++ de los algoritmos voraz, recursivo y memoizado para encontrar matchings entre dos arrays de 0s y 1s. (Primara entrega del proyecto).
+Esta carpeta contiene una implementacin en C++ de los algoritmos voraz, recursivo, memoizado y dinámico para encontrar matchings entre dos arrays de 0s y 1s. (Primara entrega del proyecto).
 
 ..........proyectoFinal
 
