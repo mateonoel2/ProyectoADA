@@ -159,6 +159,45 @@ float Min_memoizado(vector<int> A, vector<int> B, int a, int b, float **M){
 
 float Min_dinamico(vector<int> A, vector<int> B){
     float Ma[m][n];
+
+    for(int b=0; b<n; b++){
+        int sumB=0;
+        for(int i=b; i<n; i++)
+            sumB = sumB+B[i];
+        Ma[m-1][b] = float(A[m-1])/float(sumB);
+    }
+
+    for(int a=0; a<m; a++){
+        int sumA=0;
+        for(int i=a; i<m; i++)
+            sumA = sumA + A[i];
+        Ma[a][n-1] = float(sumA)/float(B[n-1]);
+    }
+
+    for(int a=m-2; a>=0; a--){
+        for(int b=n-2; b>=0; b--){
+            vector<float> posibles;
+            for(int i=a; i<=m-2; i++){
+                int sumA=0;
+                for(int j=a; j<=i; j++)
+                    sumA = sumA + A[j];
+                posibles.push_back(float(sumA)/float(B[b]) + Ma[i+1][b+1]);
+            }
+            for(int i=b; i<=n-2; i++) {
+                int sumB = 0;
+                for (int j = b; j <= i; j++)
+                    sumB = sumB + B[j];
+                posibles.push_back(float(A[a])/float(sumB) + Ma[a+1][i+1]);
+            }
+            Ma[a][b] = *min_element(posibles.begin(), posibles.end());
+        }
+    }
+
+    return Ma[0][0];
+}
+
+float promedio_dinamico(vector<int> A, vector<int> B){
+    float Ma[m][n];
     int suma[m][m];
     int sumb[n][n];
 
@@ -281,6 +320,8 @@ int main() {
     cout<<"\nMin_Matching_Memoizado: "<<Min_memoizado(A_blocks,B_blocks, 0, 0, M);
 
     cout<<"\nMin_Matching_Dinámico: "<<Min_dinamico(A_blocks,B_blocks);
+
+    cout<<"\nMin_Matching_Dinámico_Optimizado: "<<promedio_dinamico(A_blocks,B_blocks);
 
     cout<<"\nMin_Matching_Recursivo: "<<Min_recursivo(A_blocks, B_blocks, 0, 0);
     return 0;
