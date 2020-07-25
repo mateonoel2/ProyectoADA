@@ -1,0 +1,1 @@
+/home/linuxbrew/.linuxbrew/bin/c++  -g   CMakeFiles/proyectoFinal.dir/main.cpp.o  -o proyectoFinal 

@@ -1,0 +1,3 @@
+/home/jpalexander1706/CLionProjects/proyectoFinal/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/jpalexander1706/CLionProjects/proyectoFinal/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/jpalexander1706/CLionProjects/proyectoFinal/cmake-build-debug/CMakeFiles/proyectoFinal.dir
